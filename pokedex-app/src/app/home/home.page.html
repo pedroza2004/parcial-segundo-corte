@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-title>Pokédex</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="frame">
+    <div id="reader" [style.display]="scanning ? 'block' : 'none'"></div>
+    @if (!scanning) {
+      <div class="placeholder">
+        <ion-icon name="scan-outline"></ion-icon>
+        <p>Escanea el QR de un Pokémon con la cámara o desde una imagen</p>
+      </div>
+    }
+  </div>
+
+  <ion-text color="medium">
+    <p class="ion-text-center">
+      {{ modelMessage }} Reconoce los 151 Pokémon originales; la imagen se analiza en tu dispositivo.
+    </p>
+  </ion-text>
+
+  @if (scanning) {
+    <ion-text><p class="ion-text-center">{{ scanningMessage }}</p></ion-text>
+  }
+
+  @if (error) {
+    <ion-text color="danger"><p class="ion-text-center">{{ error }}</p></ion-text>
+  }
+
+  @if (!scanning) {
+    <ion-button expand="block" color="danger" (click)="startScan()">
+      <ion-icon slot="start" name="scan-outline"></ion-icon>
+      Escanear Pokémon
+    </ion-button>
+  } @else {
+    <ion-button expand="block" color="medium" (click)="stopScan()">
+      <ion-icon slot="start" name="stop-circle-outline"></ion-icon>
+      Cancelar
+    </ion-button>
+  }
+
+  @if (!scanning) {
+    <input
+      #qrImage
+      type="file"
+      accept="image/*"
+      capture="environment"
+      hidden
+      (change)="scanImage($event)"
+    />
+    <ion-button expand="block" fill="outline" color="danger" (click)="qrImage.click()">
+      Leer QR desde una imagen
+    </ion-button>
+  }
+
+  <div class="manual">
+    <ion-item>
+      <ion-input
+        label="Búsqueda manual"
+        labelPlacement="floating"
+        placeholder="pikachu o 25"
+        [(ngModel)]="manual"
+        (keyup.enter)="openPokemon(manual)"
+      ></ion-input>
+    </ion-item>
+    <ion-button fill="outline" color="danger" (click)="openPokemon(manual)">
+      <ion-icon slot="icon-only" name="search-outline"></ion-icon>
+    </ion-button>
+  </div>
+</ion-content>

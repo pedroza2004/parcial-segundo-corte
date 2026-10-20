@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-title>Pokédex</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="frame">
+    <div id="reader" [style.display]="scanning ? 'block' : 'none'"></div>
+    @if (!scanning) {
+      <div class="placeholder">
+        <ion-icon name="scan-outline"></ion-icon>
+        <p>Apunta la cámara al código QR de un Pokémon</p>
+      </div>
+    }
+  </div>
+
+  @if (error) {
+    <ion-text color="danger"><p class="ion-text-center">{{ error }}</p></ion-text>
+  }
+
+  @if (!scanning) {
+    <ion-button expand="block" color="danger" (click)="startScan()">
+      <ion-icon slot="start" name="scan-outline"></ion-icon>
+      Escanear
+    </ion-button>
+  } @else {
+    <ion-button expand="block" color="medium" (click)="stopScan()">
+      <ion-icon slot="start" name="stop-circle-outline"></ion-icon>
+      Cancelar
+    </ion-button>
+  }
+
+  <div class="manual">
+    <ion-item>
+      <ion-input
+        label="Búsqueda manual"
+        labelPlacement="floating"
+        placeholder="pikachu o 25"
+        [(ngModel)]="manual"
+        (keyup.enter)="openPokemon(manual)"
+      ></ion-input>
+    </ion-item>
+    <ion-button fill="outline" color="danger" (click)="openPokemon(manual)">
+      <ion-icon slot="icon-only" name="search-outline"></ion-icon>
+    </ion-button>
+  </div>
+</ion-content>
